@@ -8,7 +8,7 @@ MAX_ITEMS_PER_NOTIFICATION = 2
 # TODO: add log handler.
 logger = logging.getLogger(__name__)
 
-snsarn = os.getenv("NOTIFY_SNS_ARN")  # TODO: move this to a database
+snsarn = os.getenv("NOTIFY_SNS_ARN")
 snsclient = boto3.client('sns')
 
 
@@ -22,7 +22,7 @@ def chunks(lst, n):
 
 
 def get_message(item):
-    sku = item["sku"]  # should fail if "sku" does not exist
+    sku = item["sku"]  # should fail if "sku" does not exist in the dictionary
     return f"https://www.bestbuy.ca/en-ca/product/{sku}"
 
 
