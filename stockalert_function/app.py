@@ -26,7 +26,7 @@ def lambda_handler(event=None, context=None):
             notify(available_items)
 
         return {
-            "status": 200 if available_items else 204,
+            "statusCode": 200 if available_items else 204,
             "body": available_items
         }
     except:
