@@ -1,6 +1,12 @@
 # import requests
+import logging
+
 from stockalert.bbclient import BestBuyClient
 from stockalert.ntf import notify
+import lambdalogger
+
+lambdalogger.configure()
+logger = logging.getLogger(__name__)
 
 bbclient = BestBuyClient()
 
@@ -13,12 +19,16 @@ SKUS_TO_MONITOR = ['14950588', '14953247', '14953248', '14953249', '14953250', '
 
 
 def lambda_handler(event=None, context=None):
-    available_items = bbclient.get_available_items(*SKUS_TO_MONITOR)
+    try:
+        available_items = bbclient.get_available_items(*SKUS_TO_MONITOR)
 
-    if available_items:
-        notify(available_items)
+        if available_items:
+            notify(available_items)
 
-    return {
-        "status": 200 if available_items else 204,
-        "body": available_items
-    }
+        return {
+            "status": 200 if available_items else 204,
+            "body": available_items
+        }
+    except:
+        logger.exception("")
+        raise
