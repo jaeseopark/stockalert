@@ -32,5 +32,5 @@ def lookup(*skus):
 
 class BestBuyClient:
     def get_available_items(self, *skus):
-        data = self.lookup(*skus)
+        data = lookup(*skus)
         return [x for x in data if is_available(x)]
