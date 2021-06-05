@@ -5,7 +5,6 @@ import boto3
 
 MAX_ITEMS_PER_NOTIFICATION = 2
 
-# TODO: add log handler.
 logger = logging.getLogger(__name__)
 
 snsarn = os.getenv("NOTIFY_SNS_ARN")
