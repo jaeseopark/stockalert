@@ -8,38 +8,62 @@ Globals:
     Timeout: 20
 
 Parameters:
-  NotifySnsArn:
+  SnsArn:
+    Type: String
+  KmsKey:
+    Type: String
+  DiscordWebhookUrl:
     Type: String
 
 Resources:
   StockAlertFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: stockalert
       Handler: app.lambda_handler
       Runtime: python3.8
       Environment:
         Variables:
-          NOTIFY_SNS_ARN: !Ref NotifySnsArn
+          NOTIFY_SNS_ARN: !Ref SnsArn
       Events:
         CloudWatchEvent:
           Type: Schedule
           Properties:
             # Every minute between 7AM and 10PM Eastern Time (UTC-5)
             Schedule: cron(* 12-3 * * ? *)
-        LocalInvokeApi:
-          Type: Api
+  Queue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: stockalert
+  SnsToSqsSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Protocol: sqs
+      Endpoint: !GetAtt Queue.Arn
+      TopicArn: !Ref SnsArn
+  DiscordFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: discord
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Environment:
+        Variables:
+          KMS_KEY: !Ref KmsKey
+          DISCORD_WEBHOOK_URL: !Ref DiscordWebhookUrl
+      Events:
+        SqsEvent:
+          Type: SQS
           Properties:
-            Path: /invoke
-            Method: GET
-
+            Queue: !GetAtt Queue.Arn
+            BatchSize: 10
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   StockAlertFunction:
-    Description: "Hello World Lambda Function ARN"
+    Description: "StockAlertFunction ARN"
     Value: !GetAtt StockAlertFunction.Arn
   StockAlertFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
+    Description: "Implicit IAM Role created for StockAlertFunction"
     Value: !GetAtt StockAlertFunctionRole.Arn
+  DiscordFunctionIamRole:
+    Description: "Implicit IAM Role created for DiscordFunctionIamRole"
+    Value: !GetAtt DiscordFunctionRole.Arn
