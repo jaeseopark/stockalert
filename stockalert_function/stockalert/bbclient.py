@@ -13,10 +13,7 @@ def is_available(item):
     shipping = item.get("shipping")
     status = shipping and shipping.get("status")
     purchasable = shipping and shipping.get("purchasable")  # is this useful?
-    if status not in OUT_OF_STOCK_STATUS_LIST or purchasable:
-        return True
-
-    return False
+    return purchasable or status not in OUT_OF_STOCK_STATUS_LIST
 
 
 def lookup(*skus):
