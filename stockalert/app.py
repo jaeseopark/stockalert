@@ -1,8 +1,8 @@
 # import requests
 import logging
 
-from stockalert.bbclient import BestBuyClient
-from stockalert.ntf import notify
+from stockalertcore.bbclient import BestBuyClient
+from stockalertcore.ntf import notify
 import lambdalogger
 
 lambdalogger.configure()
