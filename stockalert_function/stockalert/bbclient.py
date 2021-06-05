@@ -6,7 +6,7 @@ import requests
 logger = logging.getLogger(__name__)
 
 OUT_OF_STOCK_STATUS_LIST = [None, "NotAvailable", "ComingSoon", "SoldOutOnline"]
-API_TIMEOUT = 3  # In seconds
+API_TIMEOUT = 20  # In seconds
 
 
 def is_available(item):
