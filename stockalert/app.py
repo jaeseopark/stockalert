@@ -1,4 +1,3 @@
-# import requests
 import logging
 
 from stockalertcore.bbclient import BestBuyClient
@@ -32,3 +31,7 @@ def lambda_handler(event=None, context=None):
     except:
         logger.exception("")
         raise
+
+
+if __name__ == '__main__':
+    lambda_handler()
