@@ -3,7 +3,7 @@ import logging
 
 from stockalertcore.bbclient import BestBuyClient
 from stockalertcore.ntf import notify
-import lambdalogger
+from lambdahelper import lambdalogger
 
 lambdalogger.configure()
 logger = logging.getLogger(__name__)
