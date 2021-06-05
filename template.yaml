@@ -14,13 +14,13 @@ Parameters:
 Resources:
   StockAlertFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Environment:
-      Variables:
-        NOTIFY_SNS_ARN: !Ref NotifySnsArn
     Properties:
       CodeUri: stockalert_function
       Handler: app.lambda_handler
       Runtime: python3.8
+      Environment:
+        Variables:
+          NOTIFY_SNS_ARN: !Ref NotifySnsArn
       Events:
         CloudWatchEvent:
           Type: Schedule
