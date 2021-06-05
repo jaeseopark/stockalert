@@ -1,9 +1,9 @@
 # import requests
 import logging
 
-from stockalert.bbclient import BestBuyClient
-from stockalert.ntf import notify
-import lambdalogger
+from stockalertcore.bbclient import BestBuyClient
+from stockalertcore.ntf import notify
+from lambdahelper import lambdalogger
 
 lambdalogger.configure()
 logger = logging.getLogger(__name__)
