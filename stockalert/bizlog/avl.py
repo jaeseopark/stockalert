@@ -9,7 +9,7 @@ from util import importdir
 importdir.do("retailerclient", globals())
 
 
-def filter_by_availability(skus: List[Sku]) -> List[AvailableSku]:
+def by_availability(skus: List[Sku]) -> List[Sku]:
     skus_by_retailer = defaultdict(list)
     for sku in skus:
         skus_by_retailer[sku.retailer].append(sku)
