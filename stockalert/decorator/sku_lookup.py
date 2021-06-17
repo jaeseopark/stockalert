@@ -1,15 +1,12 @@
-class SkuLookupFactory:
-    registry = dict()
+from typing import Callable, List
 
-    @staticmethod
-    def get_lookup_handler(retailer: str):
-        return SkuLookupFactory.registry[retailer]
+from entity.sku import Sku, AvailableSku
+from factory.sku_lookup_factory import SkuLookupFactory
 
 
 def sku_lookup(retailer: str):
-    def wrapper(func):
-        assert retailer not in SkuLookupFactory.registry
-        SkuLookupFactory.registry[retailer] = func
+    def wrapper(func: Callable[[List[Sku]], List[AvailableSku]]):
+        SkuLookupFactory.register_lookup_handler(retailer, func)
         return func
 
     return wrapper

@@ -1,8 +1,8 @@
 from collections import defaultdict
 from typing import List
 
-from decorator.sku_lookup import SkuLookupFactory
 from entity.sku import Sku, AvailableSku
+from factory.sku_lookup_factory import SkuLookupFactory
 from util import importdir
 
 # This line imports all modules in the specified directory. This triggers SkuLookupFactory to self-populate.
