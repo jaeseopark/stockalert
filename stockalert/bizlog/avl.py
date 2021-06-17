@@ -5,7 +5,7 @@ from entity.sku import Sku, AvailableSku
 from factory.sku_lookup_factory import SkuLookupFactory
 from util import importdir
 
-# This line imports all modules in the specified directory. This triggers SkuLookupFactory to self-populate.
+# This line imports all files in the specified directory. This triggers SkuLookupFactory to self-populate.
 importdir.do("retailerclient", globals())
 
 
