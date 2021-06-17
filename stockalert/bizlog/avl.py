@@ -1,23 +1,12 @@
 from collections import defaultdict
 from typing import List
 
+from decorator.sku_lookup import SkuLookupFactory
 from entity.sku import Sku, AvailableSku
-from retailerclient.bbclient import BestBuyClient
+from util import importdir
 
-bbclient = BestBuyClient()
-
-
-class SkuLookupFactory:
-    registry = [
-        (lambda retailer: retailer == "bestbuy.ca", bbclient.filter_by_availability,),
-    ]
-
-    def get_lookup_handler(retailer):
-        for cond, handler in SkuLookupFactory.registry:
-            if cond(retailer):
-                return handler
-
-        raise RuntimeError(f"No handler found for retailer={retailer}")
+# This line imports all modules in the specified directory. This triggers SkuLookupFactory to self-populate.
+importdir.do("retailerclient", globals())
 
 
 def filter_by_availability(skus: List[Sku]) -> List[AvailableSku]:

@@ -4,6 +4,7 @@ from typing import List
 
 import requests
 
+from decorator.sku_lookup import sku_lookup
 from entity.sku import Sku, AvailableSku
 
 logger = logging.getLogger(__name__)
@@ -46,11 +47,11 @@ def get_bb_product_link(sku: Sku) -> str:
     return f"https://www.bestbuy.ca/en-ca/product/{sku.identifier}"
 
 
-class BestBuyClient:
-    def filter_by_availability(self, skus: List[Sku]) -> List[AvailableSku]:
-        sku_dict: dict = {sku.identifier: sku for sku in skus}
-        availabilities = lookup(skus)
+@sku_lookup(retailer="bestbuy.ca")
+def filter_by_availability(skus: List[Sku]) -> List[AvailableSku]:
+    sku_dict: dict = {sku.identifier: sku for sku in skus}
+    availabilities = lookup(skus)
 
-        return [AvailableSku(sku_dict[x["sku"]], stringify=get_bb_product_link)
-                for x in availabilities
-                if is_available(x)]
+    return [AvailableSku(sku_dict[x["sku"]], stringify=get_bb_product_link)
+            for x in availabilities
+            if is_available(x)]
