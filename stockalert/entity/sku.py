@@ -18,6 +18,7 @@ class Sku:
 class AvailableSku(Sku):
     def __init__(self, *init, **kwargs):
         self.stringify = None
+        self.price = None
         super(AvailableSku, self).__init__(*init, **kwargs)
         assert self.stringify is not None
 
