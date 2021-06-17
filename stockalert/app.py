@@ -1,32 +1,32 @@
+import csv
 import logging
+from typing import List
 
-from stockalertcore.bbclient import BestBuyClient
-from stockalertcore.ntf import notify
+from bizlog.avl import filter_by_availability
+from bizlog.ntf import notify
+from entity.sku import Sku
 from lambdahelper import lambdalogger
 
 lambdalogger.configure()
 logger = logging.getLogger(__name__)
 
-bbclient = BestBuyClient()
 
-# TODO: move the SKUs to a database.
-SKUS_TO_MONITOR = ['14950588', '14953247', '14953248', '14953249', '14953250', '14954116', '14954117', '14966477',
-                   '14967857', '15000077', '15000078', '15000079', '15038016', '15053085', '15053087', '15078017',
-                   '15084753', '15147122', '15166285', '15178453', '15201200', '15229237', '15268899', '15309503',
-                   '15309504', '15309513', '15309514', '15317226', '15318940', '15324508', '15373182', '15441686',
-                   '15463567', '15463568', '15493494', '15507363', '15524483', '15524484', '15524485', '15530045']
+def get_skus_to_monitor() -> List[Sku]:
+    with open("skus.csv", encoding='utf-8') as csvf:
+        return [Sku(x) for x in csv.DictReader(csvf)]
 
 
 def lambda_handler(event=None, context=None):
     try:
-        available_items = bbclient.get_available_items(*SKUS_TO_MONITOR)
+        skus = get_skus_to_monitor()
+        available_skus = filter_by_availability(skus)
 
-        if available_items:
-            notify(available_items)
+        if available_skus:
+            notify(available_skus)
 
         return {
-            "statusCode": 200 if available_items else 204,
-            "body": available_items
+            "statusCode": 200 if available_skus else 204,
+            "body": available_skus
         }
     except:
         logger.exception("")
