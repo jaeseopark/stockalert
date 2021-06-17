@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 
 
 def get_skus_to_monitor() -> List[Sku]:
-    # TODO: move the SKUs to a database.
     with open("skus.csv", encoding='utf-8') as csvf:
         return [Sku(x) for x in csv.DictReader(csvf)]
 
