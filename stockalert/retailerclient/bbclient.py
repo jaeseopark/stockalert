@@ -9,7 +9,7 @@ from entity.sku import Sku, AvailableSku
 
 logger = logging.getLogger(__name__)
 
-OUT_OF_STOCK_STATUS_LIST = [None, "NotAvailable", "ComingSoon", "SoldOutOnline"]
+OUT_OF_STOCK_STATUS_LIST = [None, "NotAvailable", "ComingSoon", "SoldOutOnline", "Unknown"]
 API_TIMEOUT = 20  # In seconds
 
 
