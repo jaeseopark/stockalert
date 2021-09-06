@@ -52,5 +52,4 @@ def get_memory_express_product_link(sku: Sku) -> str:
 def filter_by_availability(skus: List[Sku]) -> List[AvailableSku]:
     sku_dict: dict = {sku.identifier: sku for sku in skus}
     availabilities = lookup(skus)
-    print(availabilities[0])
     return availabilities
