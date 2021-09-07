@@ -8,3 +8,9 @@ Currently supported:
 * Retailer - Bestbuy.ca
 * Notification - SMS (private)
 * Notification - Discord (private)
+
+## Development
+
+```bash
+sam local invoke StockAlertFunction # TODO: mock SNS
+```
