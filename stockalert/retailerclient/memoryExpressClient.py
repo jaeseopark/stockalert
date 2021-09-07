@@ -26,18 +26,24 @@ def lookup(skus: List[Sku]) -> List[AvailableSku]:
         logger.info("Making a GET call...")
 
         r = requests.get(url, headers=headers, timeout=API_TIMEOUT)
-        r.raise_for_status()
-
+        if (not r.ok):
+            logger.info(f"Request to memory express url {url} failed with code {r.status_code}")
+            continue
+        
         logger.info("GET call was successful")
 
         html_doc = r.text
         soup = BeautifulSoup(html_doc, 'html.parser')
+
         stores = soup.find_all("div", class_="c-capr-inventory-store")
-        for store in stores:
-            text = store.text
-            if ("Edmonton" in text and "Out" not in text):
-                availabilities.append(AvailableSku(sku, stringify=get_memory_express_product_link))
-                break
+        if len(stores) > 0:
+            for store in stores:
+                text = store.text
+                if ("Edmonton" in text and "Out" not in text):
+                    availabilities.append(AvailableSku(sku, stringify=get_memory_express_product_link))
+                    break
+        else:
+            logger.info("Memory express changed their store classname! Please update the store/stock query")
 
     logger.info(f"len(availabilities)={len(availabilities)}")
 
@@ -50,6 +56,5 @@ def get_memory_express_product_link(sku: Sku) -> str:
 
 @sku_lookup(retailer="memoryexpress.com")
 def filter_by_availability(skus: List[Sku]) -> List[AvailableSku]:
-    sku_dict: dict = {sku.identifier: sku for sku in skus}
     availabilities = lookup(skus)
     return availabilities
