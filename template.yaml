@@ -29,8 +29,8 @@ Resources:
         CloudWatchEvent:
           Type: Schedule
           Properties:
-            # Every minute between 7AM and 10PM Eastern Time (UTC-5)
-            Schedule: cron(* 12-3 * * ? *)
+            # Every 6 minutes
+            Schedule: cron(*/6 * * * ? *)
   Queue:
     Type: AWS::SQS::Queue
     Properties:
