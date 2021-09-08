@@ -7,6 +7,7 @@ from bizlog.sku_filter import by_availability, by_price
 from bizlog.ntf import notify
 from entity.sku import Sku
 from lambdahelper import lambdalogger
+from util.network import log_public_ip
 
 lambdalogger.configure()
 logger = logging.getLogger(__name__)
@@ -23,6 +24,7 @@ def apply(param, func):
 
 def lambda_handler(event=None, context=None):
     try:
+        log_public_ip()
         local_skus = read_local_skus()
         filters = [by_availability, by_price]
         available_skus = reduce(apply, filters, local_skus)
