@@ -47,7 +47,7 @@ def get_bb_product_link(sku: Sku) -> str:
     return f"https://www.bestbuy.ca/en-ca/product/{sku.identifier}"
 
 
-@sku_lookup(retailer="bestbuy.ca")
+@sku_lookup(retailer="bestbuy.ca", skip=True)
 def filter_by_availability(skus: List[Sku]) -> List[AvailableSku]:
     sku_dict: dict = {sku.identifier: sku for sku in skus}
     availabilities = lookup(skus)

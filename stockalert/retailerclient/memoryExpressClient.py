@@ -1,4 +1,3 @@
-import json
 import logging
 from bs4 import BeautifulSoup
 
@@ -11,7 +10,8 @@ from entity.sku import Sku, AvailableSku
 
 logger = logging.getLogger(__name__)
 
-API_TIMEOUT = 20  # In seconds
+API_TIMEOUT = 3  # In seconds
+
 
 def lookup(skus: List[Sku]) -> List[AvailableSku]:
     headers = {
@@ -29,7 +29,7 @@ def lookup(skus: List[Sku]) -> List[AvailableSku]:
         if (not r.ok):
             logger.info(f"Request to memory express url {url} failed with code {r.status_code}")
             continue
-        
+
         logger.info("GET call was successful")
 
         html_doc = r.text
@@ -56,5 +56,4 @@ def get_memory_express_product_link(sku: Sku) -> str:
 
 @sku_lookup(retailer="memoryexpress.com")
 def filter_by_availability(skus: List[Sku]) -> List[AvailableSku]:
-    availabilities = lookup(skus)
-    return availabilities
+    return lookup(skus)

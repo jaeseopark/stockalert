@@ -14,9 +14,6 @@ class Sku:
         for key in kwargs:
             setattr(self, key, kwargs[key])
 
-    def __repr__(self):
-        return str(self)
-
 
 class AvailableSku(Sku):
     def __init__(self, *init, **kwargs):
@@ -27,3 +24,6 @@ class AvailableSku(Sku):
 
     def __str__(self):
         return self.stringify(self)
+
+    def __repr__(self):
+        return str(self)
