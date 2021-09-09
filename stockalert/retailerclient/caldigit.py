@@ -8,12 +8,9 @@ from decorator.sku_lookup import sku_lookup
 from entity.sku import Sku, AvailableSku
 from util.urlstring import get_query_param
 
-logger = logging.getLogger(__name__)
+from util.network import BROWSER_USER_AGENT
 
-# To be refactored
-HEADERS = {
-    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36"
-}
+logger = logging.getLogger(__name__)
 
 
 def to_numeric_price(price_string: str) -> float:
@@ -31,7 +28,7 @@ def to_product_object(soup_element) -> dict:
 
 
 def get_product_map(url: str) -> Dict[str, dict]:
-    r = requests.get(url, headers=HEADERS)
+    r = requests.get(url, headers={"user-agent": BROWSER_USER_AGENT})
 
     if not r.ok:
         logger.error("GET call failed")
