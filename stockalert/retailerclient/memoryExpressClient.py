@@ -1,5 +1,4 @@
 import logging
-from multiprocessing.pool import ThreadPool
 
 from bs4 import BeautifulSoup
 
@@ -12,9 +11,11 @@ from entity.sku import Sku, AvailableSku
 
 from util.network import BROWSER_USER_AGENT
 
+from lambdahelper.lambdapool import Pool
+
 logger = logging.getLogger(__name__)
 
-THREAD_POOL_SIZE = 5
+POOL_SIZE = 5
 API_TIMEOUT = 3  # In seconds
 
 HEADERS = {"user-agent": BROWSER_USER_AGENT}
@@ -50,8 +51,8 @@ def process_single_sku(sku: Sku) -> AvailableSku:
 def lookup(skus: List[Sku]) -> List[AvailableSku]:
     availabilities = []
 
-    pool = ThreadPool(THREAD_POOL_SIZE)
-    result_set = pool.imap_unordered(process_single_sku, skus)
+    pool = Pool(POOL_SIZE)
+    result_set = pool.map(process_single_sku, skus)
 
     for available_sku in result_set:
         if available_sku:
