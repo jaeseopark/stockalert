@@ -11,11 +11,8 @@ from entity.sku import Sku, AvailableSku
 
 from util.network import BROWSER_USER_AGENT
 
-from lambdahelper.lambdapool import Pool
-
 logger = logging.getLogger(__name__)
 
-POOL_SIZE = 5
 API_TIMEOUT = 3  # In seconds
 
 HEADERS = {"user-agent": BROWSER_USER_AGENT}
@@ -51,15 +48,10 @@ def process_single_sku(sku: Sku) -> AvailableSku:
 def lookup(skus: List[Sku]) -> List[AvailableSku]:
     availabilities = []
 
-    pool = Pool(POOL_SIZE)
-    result_set = pool.map(process_single_sku, skus)
-
-    for available_sku in result_set:
+    for sku in skus:
+        available_sku = process_single_sku(sku)
         if available_sku:
             availabilities.append(available_sku)
-
-    pool.close()
-    pool.join()
 
     logger.info(f"len(availabilities)={len(availabilities)}")
 
