@@ -50,7 +50,13 @@ def get_product_map(url: str) -> Dict[str, dict]:
 
 
 def _filter_by_availability(skus: List[Sku], url: str) -> List[AvailableSku]:
-    product_map = get_product_map(url)
+    try:
+        product_map = get_product_map(url)
+    except:
+        # get_product_map() is pretty brittle. expect to fail at any point.
+        logger.exception("")
+        return []
+
     available_product_map = {k: v for k, v in product_map.items() if v.get("available")}
 
     def merge(sku: Sku, product: dict) -> AvailableSku:
