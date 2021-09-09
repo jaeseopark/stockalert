@@ -1,4 +1,6 @@
 import logging
+from multiprocessing.pool import ThreadPool
+
 from bs4 import BeautifulSoup
 
 from typing import List
@@ -8,42 +10,55 @@ import requests
 from decorator.sku_lookup import sku_lookup
 from entity.sku import Sku, AvailableSku
 
+from util.network import BROWSER_USER_AGENT
+
 logger = logging.getLogger(__name__)
 
+THREAD_POOL_SIZE = 5
 API_TIMEOUT = 3  # In seconds
+
+HEADERS = {"user-agent": BROWSER_USER_AGENT}
+
+
+def process_single_sku(sku: Sku) -> AvailableSku:
+    url = get_memory_express_product_link(sku)
+
+    logger.info("Making a GET call...")
+
+    r = requests.get(url, headers=HEADERS, timeout=API_TIMEOUT)
+    if (not r.ok):
+        logger.info(f"Request to memory express url {url} failed with code {r.status_code}")
+        return None
+
+    logger.info("GET call was successful")
+
+    html_doc = r.text
+    soup = BeautifulSoup(html_doc, 'html.parser')
+
+    stores = soup.find_all("div", class_="c-capr-inventory-store")
+    if len(stores) > 0:
+        for store in stores:
+            text = store.text
+            if ("Edmonton" in text and "Out" not in text):
+                return AvailableSku(sku, stringify=get_memory_express_product_link)
+    else:
+        logger.info("Memory express changed their store classname! Please update the store/stock query")
+
+    return None
 
 
 def lookup(skus: List[Sku]) -> List[AvailableSku]:
-    headers = {
-        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36"
-    }
-
     availabilities = []
 
-    for sku in skus:
-        url = get_memory_express_product_link(sku)
+    pool = ThreadPool(THREAD_POOL_SIZE)
+    result_set = pool.imap_unordered(process_single_sku, skus)
 
-        logger.info("Making a GET call...")
+    for available_sku in result_set:
+        if available_sku:
+            availabilities.append(available_sku)
 
-        r = requests.get(url, headers=headers, timeout=API_TIMEOUT)
-        if (not r.ok):
-            logger.info(f"Request to memory express url {url} failed with code {r.status_code}")
-            continue
-
-        logger.info("GET call was successful")
-
-        html_doc = r.text
-        soup = BeautifulSoup(html_doc, 'html.parser')
-
-        stores = soup.find_all("div", class_="c-capr-inventory-store")
-        if len(stores) > 0:
-            for store in stores:
-                text = store.text
-                if ("Edmonton" in text and "Out" not in text):
-                    availabilities.append(AvailableSku(sku, stringify=get_memory_express_product_link))
-                    break
-        else:
-            logger.info("Memory express changed their store classname! Please update the store/stock query")
+    pool.close()
+    pool.join()
 
     logger.info(f"len(availabilities)={len(availabilities)}")
 
