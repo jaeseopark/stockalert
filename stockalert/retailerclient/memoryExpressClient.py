@@ -1,5 +1,4 @@
 import logging
-from multiprocessing.pool import Pool
 
 from bs4 import BeautifulSoup
 
@@ -11,6 +10,8 @@ from decorator.sku_lookup import sku_lookup
 from entity.sku import Sku, AvailableSku
 
 from util.network import BROWSER_USER_AGENT
+
+from lambdahelper.lambdapool import Pool
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +52,7 @@ def lookup(skus: List[Sku]) -> List[AvailableSku]:
     availabilities = []
 
     pool = Pool(POOL_SIZE)
-    result_set = pool.imap_unordered(process_single_sku, skus)
+    result_set = pool.map(process_single_sku, skus)
 
     for available_sku in result_set:
         if available_sku:
