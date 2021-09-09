@@ -7,7 +7,7 @@ import requests
 from decorator.sku_lookup import sku_lookup
 from entity.sku import Sku, AvailableSku
 
-from stockalert.util.network import BROWSER_USER_AGENT
+from util.network import BROWSER_USER_AGENT
 
 logger = logging.getLogger(__name__)
 
