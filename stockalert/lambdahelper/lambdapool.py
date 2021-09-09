@@ -59,3 +59,9 @@ class Pool:
                 finished[index] = result
 
         return finished
+
+    def close(self):
+        pass
+
+    def join(self):
+        pass
