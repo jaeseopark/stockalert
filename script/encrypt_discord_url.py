@@ -1,3 +1,8 @@
+"""
+Windows equiv:
+  aws kms encrypt --profile {PROFILE} --key-id {ARN} --plaintext fileb://plaintext.txt --output text --query CiphertextBlob
+"""
+
 import base64
 
 import boto3
