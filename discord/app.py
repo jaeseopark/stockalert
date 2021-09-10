@@ -40,5 +40,3 @@ def lambda_handler(event, context=None):
 
         url = decrypt_webhook_url(ciphertext)
         dwclient.publish(url, ",".join(rest))
-
-
