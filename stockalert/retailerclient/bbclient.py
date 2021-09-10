@@ -53,6 +53,6 @@ def filter_by_availability(skus: List[Sku]) -> List[AvailableSku]:
     sku_dict: dict = {sku.identifier: sku for sku in skus}
     availabilities = lookup(skus)
 
-    return [AvailableSku(sku_dict[x["sku"]], stringify=get_bb_product_link)
+    return [AvailableSku(sku_dict[x["sku"]], link=get_bb_product_link(x))
             for x in availabilities
             if is_available(x)]

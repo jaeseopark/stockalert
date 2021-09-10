@@ -38,7 +38,7 @@ def process_single_sku(sku: Sku) -> AvailableSku:
         for store in stores:
             text = store.text
             if ("Edmonton" in text and "Out" not in text):
-                return AvailableSku(sku, stringify=get_memory_express_product_link)
+                return AvailableSku(sku, link=get_memory_express_product_link(sku))
     else:
         logger.info("Memory express changed their store classname! Please update the store/stock query")
 
