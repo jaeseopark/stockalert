@@ -57,10 +57,7 @@ def _filter_by_availability(skus: List[Sku], url: str) -> List[AvailableSku]:
     available_product_map = {k: v for k, v in product_map.items() if v.get("available")}
 
     def merge(sku: Sku, product: dict) -> AvailableSku:
-        def stringify(_):
-            return product.get("link")
-
-        return AvailableSku(sku, price=product.get("price"), stringify=stringify)
+        return AvailableSku(sku, price=product.get("price"), link=product.get("link"))
 
     return [
         merge(sku, available_product_map[sku.identifier])
