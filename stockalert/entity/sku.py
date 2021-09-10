@@ -24,7 +24,7 @@ class AvailableSku(Sku):
         assert self.stringify is not None
 
     def __str__(self):
-        return self.stringify(self)
+        return f"{self.shortname} {self.stringify(self)}"
 
     def __repr__(self):
         return str(self)
