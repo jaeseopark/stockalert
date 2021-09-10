@@ -4,5 +4,5 @@ import requests
 class DiscordWebhookClient:
     def publish(self, url, message):
         assert isinstance(message, str)
-        payload = {"content": message.strip()}
+        payload = {"content": message}
         requests.post(url, json=payload)
