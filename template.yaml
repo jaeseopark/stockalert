@@ -12,8 +12,6 @@ Parameters:
     Type: String
   KmsKey:
     Type: String
-  DiscordWebhookUrl:
-    Type: String
 
 Resources:
   StockAlertFunction:
@@ -49,7 +47,6 @@ Resources:
       Environment:
         Variables:
           KMS_KEY: !Ref KmsKey
-          DISCORD_WEBHOOK_URL: !Ref DiscordWebhookUrl
       Events:
         SqsEvent:
           Type: SQS
