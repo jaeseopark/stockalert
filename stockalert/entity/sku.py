@@ -1,8 +1,9 @@
 class Sku:
     def __init__(self, *init, **kwargs):
+        self.discord = None
         self.retailer = None
         self.identifier = None
-        self.tier = None
+        self.shortname = None
         self.name = None
         self.price_threshold = None
 
