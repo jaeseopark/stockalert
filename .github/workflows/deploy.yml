@@ -25,7 +25,7 @@ jobs:
       - name: sam deploy
         uses: youyo/aws-sam-action/python3.8@master
         with:
-          sam_command: 'deploy --no-fail-on-empty-changeset --stack-name stockalert --s3-bucket stockalert-artifacts --parameter-overrides SnsArn=arn:aws:sns:us-west-2:811555881555:stockalert KmsKey=521d7095-3104-4029-9b1b-1105b30f6ef7 DiscordWebhookUrl=AQICAHg3cwrL/m2ZQsnLtDXEpelNwQ5CRp0C9QHEZshOGznfHgE9RLJu6NfE4iKvVgiQKgg0AAAA2zCB2AYJKoZIhvcNAQcGoIHKMIHHAgEAMIHBBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDCnMNf+BI4KuDxaD4wIBEICBk8P4eV/BqoDSZpNGJ0rvqEaUqQj8Du+N8ttbXg3TfqHZcH7N6RIfI3z/ouf1Hd/UCghFpOK+tNmZ80mUQizjBOjFkY1HgH2bVHMO59z7kLmKSjS27k6SRLamyO5zkv6gV+8S1y/ZNOZBZ+GrNhSNBWlx9Mhg5V26l7OKoB18AkZpxfQXpW47HKTxk2/IoWsG/dE0hQ== --region us-west-2 --capabilities CAPABILITY_IAM'
+          sam_command: 'deploy --no-fail-on-empty-changeset --stack-name stockalert --s3-bucket stockalert-artifacts --parameter-overrides SnsArn=arn:aws:sns:us-west-2:811555881555:stockalert KmsKey=521d7095-3104-4029-9b1b-1105b30f6ef7 --region us-west-2 --capabilities CAPABILITY_IAM'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

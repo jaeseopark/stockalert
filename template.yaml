@@ -6,63 +6,48 @@ Description: stockalert
 Globals:
   Function:
     Timeout: 30
+    Handler: app.lambda_handler
+    Runtime: python3.8
 
 Parameters:
-  SnsArn:
-    Type: String
   KmsKey:
-    Type: String
-  DiscordWebhookUrl:
     Type: String
 
 Resources:
+  DiscordFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: discord
+      Environment:
+        Variables:
+          KMS_KEY: !Ref KmsKey
+  Sns:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Protocol: lambda
+          Endpoint: !GetAtt DiscordFunction.Arn
+  DebugSns:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Protocol: lambda
+          Endpoint: !GetAtt DiscordFunction.Arn
+  SnsPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref DiscordFunction
+      Principal: sns.amazonaws.com
   StockAlertFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: stockalert
-      Handler: app.lambda_handler
-      Runtime: python3.8
       Environment:
         Variables:
-          NOTIFY_SNS_ARN: !Ref SnsArn
+          NOTIFY_SNS_ARN: !Ref Sns
       Events:
         CloudWatchEvent:
           Type: Schedule
           Properties:
             Schedule: cron(*/10 * * * ? *)
-  Queue:
-    Type: AWS::SQS::Queue
-    Properties:
-      QueueName: stockalert
-  SnsToSqsSubscription:
-    Type: AWS::SNS::Subscription
-    Properties:
-      Protocol: sqs
-      Endpoint: !GetAtt Queue.Arn
-      TopicArn: !Ref SnsArn
-  DiscordFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: discord
-      Handler: app.lambda_handler
-      Runtime: python3.8
-      Environment:
-        Variables:
-          KMS_KEY: !Ref KmsKey
-          DISCORD_WEBHOOK_URL: !Ref DiscordWebhookUrl
-      Events:
-        SqsEvent:
-          Type: SQS
-          Properties:
-            Queue: !GetAtt Queue.Arn
-            BatchSize: 10
-Outputs:
-  StockAlertFunction:
-    Description: "StockAlertFunction ARN"
-    Value: !GetAtt StockAlertFunction.Arn
-  StockAlertFunctionIamRole:
-    Description: "Implicit IAM Role created for StockAlertFunction"
-    Value: !GetAtt StockAlertFunctionRole.Arn
-  DiscordFunctionIamRole:
-    Description: "Implicit IAM Role created for DiscordFunctionIamRole"
-    Value: !GetAtt DiscordFunctionRole.Arn
