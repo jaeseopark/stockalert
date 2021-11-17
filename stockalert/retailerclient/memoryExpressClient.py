@@ -81,10 +81,10 @@ def get_memory_express_product_link(sku: Sku) -> str:
 
 
 @sku_lookup(retailer="memoryexpress.com/Edmonton")
-def filter_by_availability(skus: List[Sku]) -> List[AvailableSku]:
+def filter_by_availability_edm(skus: List[Sku]) -> List[AvailableSku]:
     return lookup_by_region(skus, "Edmonton")
 
 
 @sku_lookup(retailer="memoryexpress.com/Vancouver")
-def filter_by_availability(skus: List[Sku]) -> List[AvailableSku]:
+def filter_by_availability_van(skus: List[Sku]) -> List[AvailableSku]:
     return lookup_by_region(skus, "Vancouver")
