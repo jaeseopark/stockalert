@@ -41,3 +41,8 @@ discord,retailer,identifier,shortname,name
 #gpu,bestbuy.ca,15530045,3080 Ti,NVIDIA GeForce RTX 3080 Ti 12GB GDDR6X Video Card
 #gpu,bestbuy.ca,15459506,3070,MSI NVIDIA GeForce RTX 3070 SUPRIM X 8GB GDDR6 Video Card
 #gpu,memoryexpress.com/Edmonton,MX00117884,3060 Ti,EVGA GeForce RTX 3060 Ti FTW3 ULTRA GAMING (LHR) 8GB
+#cpu,memoryexpress.com/Vancouver,MX00119042,12900K,Core i9-12900K Processor 3.2GHz w/ 16 (8P + 8E) Cores / 24 Threads
+#cpu,memoryexpress.com/Vancouver,MX00119178,12900KF,Core i9-12900KF Processor 3.2GHz w/ 16 (8P + 8E) Cores / 24 Threads
+#cpu,memoryexpress.com/Vancouver,MX00119043,12700K,Core i7-12700K Processor 3.6GHz w/ 12 (8P + 4E) Cores / 20 Threads
+#cpu,memoryexpress.com/Vancouver,MX00119044,12700KF,Core i7-12700KF Processor 3.6GHz w/ 12 (8P + 4E) Cores / 20 Threads
+#cpu,memoryexpress.com/Vancouver,MX00119045,12600K,Core i5-12600K Processor 3.7GHz w/ 10 (6P + 4E) Cores / 16 Threads
