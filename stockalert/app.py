@@ -15,7 +15,11 @@ logger = logging.getLogger(__name__)
 
 def read_local_skus() -> List[Sku]:
     with open("skus.csv", encoding='utf-8') as csvf:
-        return [Sku(x) for x in csv.DictReader(csvf)]
+        skus = [Sku(x) for x in csv.DictReader(csvf)]
+    for sku in skus:
+        if sku.price_threshold is not None:
+            sku.price_threshold = float(sku.price_threshold)
+    return skus
 
 
 def apply(param, func):
@@ -28,7 +32,7 @@ def lambda_handler(event=None, context=None):
         local_skus = read_local_skus()
         filters = [by_availability, by_price]
         available_skus = reduce(apply, filters, local_skus)
-        
+
         if available_skus:
             notify(available_skus)
 
