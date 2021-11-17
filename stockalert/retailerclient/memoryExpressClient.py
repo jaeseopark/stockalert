@@ -22,7 +22,7 @@ HEADERS = {"user-agent": BROWSER_USER_AGENT}
 REGEX_DOLLAR_AMOUNT_SANITIZER = re.compile(r"[^0-9.]")
 
 
-@lru_cache(maxsize=10)
+@lru_cache(maxsize=20)
 def get_api_response(url: str):
     logger.info("Making a GET call...")
 
